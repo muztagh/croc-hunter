@@ -4,17 +4,19 @@
 
 Master:
   ImageTag: "2.74"
-  Memory: "512Mi"
-  HostName: jenkins.acs.az.estrado.io
+  HostName: jenkins.muztagh.info
   ServiceType: ClusterIP
   InstallPlugins:
-      - kubernetes:0.12
-      - workflow-aggregator:2.5
-      - credentials-binding:1.13
       - git:3.5.1
       - pipeline-github-lib:1.0
       - ghprb:1.39.0
       - blueocean:1.1.7
+      - kubernetes:1.12.4
+      - workflow-job:2.24
+      - workflow-aggregator:2.5
+      - credentials-binding:1.16
+      - git:3.9.1
+
 
   ScriptApproval:
     - "method groovy.json.JsonSlurperClassic parseText java.lang.String"
@@ -29,11 +31,16 @@ Master:
     Annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
+      certmanager.k8s.io/cluster-issuer: letsencrypt-prod
 
     TLS:
-      - secretName: jenkins.acs.az.estrado.io
+      - secretName: jenkins.muztagh.info
         hosts:
-          - jenkins.acs.az.estrado.io
+          - jenkins.muztagh.info
 
 Agent:
   Enabled: false
+
+Persistence:
+  Enabled: true
+  StorageClass: "nfs"
